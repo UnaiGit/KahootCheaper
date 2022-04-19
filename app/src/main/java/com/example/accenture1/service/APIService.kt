@@ -6,13 +6,14 @@ import okhttp3.ResponseBody
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Path
 
 interface APIService {
 
     @POST("/v3/d0e03a0b-ce2a-4dc6-87f2-db26d00fd6a7/")
     suspend fun createGame(@Body requestBody: RequestBody): Response<ResponseBody>
 
-    @GET("/v3/d0e03a0b-ce2a-4dc6-87f2-db26d00fd6a7/")
-    suspend fun getGame(): Response<ResponseBody>
+    @GET("/v3/d0e03a0b-ce2a-4dc6-87f2-db26d00fd6a7/{Id}")
+    suspend fun getGame(@Path("id") gameId: String): Response<ResponseBody>
 
 }

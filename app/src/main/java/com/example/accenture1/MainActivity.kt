@@ -23,8 +23,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        binding.btnStart.setOnClickListener()
+        getJSON()
+        //binding.btnStart.setOnClickListener()
     }
 
     fun rawJSON(){
@@ -71,7 +71,24 @@ class MainActivity : AppCompatActivity() {
         val service = retrofit.create(APIService::class.java)
 
         CoroutineScope(Dispatchers.IO).launch {
-            val response
+            val response = service.getGame()
+
+            withContext(Dispatchers.Main){
+                if (response.isSuccessful){
+
+                    val gson = GsonBuilder().setPrettyPrinting().create()
+                    val prettyJson = gson.toJson(
+                        JsonParser.parseString(
+                            response.body()
+                                ?.string()
+                        )
+                    )
+
+                    Log.d("Pretty Printed JSON: ", prettyJson)
+                }else{
+                    Log.e("RETROFIC_EROR", response.code().toString())
+                }
+            }
         }
     }
 }
